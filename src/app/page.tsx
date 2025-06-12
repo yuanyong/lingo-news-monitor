@@ -1,13 +1,26 @@
-export default function Home() {
+import { prisma } from '@/lib/prisma';
+import WebsetNav from '@/components/WebsetNav';
+import WebsetItems from '@/components/WebsetItems';
+
+export default async function Home({
+  searchParams
+}: {
+  searchParams: Promise<{ websetId?: string }>
+}) {
+  const params = await searchParams;
+  const websets = await prisma.webset.findMany();
+  const selectedWebsetId = params.websetId || websets[0]?.websetId;
+
   return (
-    <div className="max-w-6xl mx-auto px-6 py-12">
-      <div>
-        <h2 className="text-2xl font-serif mb-6">Your News Feed</h2>
-        <div className="bg-gray-50 border border-gray-300 rounded-lg p-8 text-center">
-          <p className="text-text-light-muted">
-            No news items yet. Set up your websets to start monitoring.
-          </p>
+    <div>
+      <div className="border-b border-gray-200">
+        <div className="max-w-4xl mx-auto py-2">
+          <h2 className="text-3xl">News Monitor</h2>
         </div>
+      </div>
+      <div className="max-w-4xl mx-auto py-4">
+        <WebsetNav websets={websets} selectedWebsetId={selectedWebsetId} />
+        {selectedWebsetId && <WebsetItems websetId={selectedWebsetId} />}
       </div>
     </div>
   );
