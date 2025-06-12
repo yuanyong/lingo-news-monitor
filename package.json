@@ -9,9 +9,11 @@
     "start": "next start",
     "lint": "next lint",
     "setup": "node scripts/setup.js",
+    "smee": "smee -u https://smee.io/2lOamDARsY7xiixK -t http://localhost:3000/api/webhook",
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
-    "db:studio": "dotenv -e .env.local -- prisma studio"
+    "db:studio": "dotenv -e .env.local -- prisma studio",
+    "delete-all": "node ./scripts/delete_all.js"
   },
   "dependencies": {
     "@prisma/client": "^6.9.0",

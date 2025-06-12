@@ -23,62 +23,79 @@ export async function POST(request: NextRequest) {
   }
 
   const body = JSON.parse(rawBody);
-  
-  // Concise logging
-  console.log(`[${body.type}]`, body.data);
 
-  // Handle webset.item.enriched events
-  if (body.type === 'webset.item.enriched') {
-    try {
-      const itemData = body.data;
-      
-      // First, ensure the webset exists
-      await prisma.webset.upsert({
-        where: { websetId: itemData.websetId },
-        update: {},
-        create: {
-          websetId: itemData.websetId,
-          name: `Webset ${itemData.websetId}`, // Default name, can be updated later
+  switch (body.type) {
+    case 'webset.created': {
+      try {
+        const websetData = body.data;
+        const websetName = websetData.metadata?.name;
+        if (!websetName) {
+          console.error(`webset.created event missing metadata.name for websetId ${websetData.id}`);
+          return NextResponse.json({ error: 'Missing webset name' }, { status: 400 });
         }
-      });
-
-      // Extract image from the URL
-      const imageUrl = await extractImagesFromUrl(itemData.properties.url);
-      
-      // Save the enriched item
-      await prisma.websetItem.upsert({
-        where: { itemId: itemData.id },
-        update: {
-          url: itemData.properties.url,
-          title: itemData.properties.article?.title || null,
-          description: itemData.properties.description || null,
-          content: itemData.properties.content || null,
-          author: itemData.properties.article?.author || null,
-          publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
-          imageUrl: imageUrl,
-          enrichments: itemData.enrichments || null,
-          evaluations: itemData.evaluations || null,
-          updatedAt: new Date(),
-        },
-        create: {
-          itemId: itemData.id,
-          websetId: itemData.websetId,
-          url: itemData.properties.url,
-          title: itemData.properties.article?.title || null,
-          description: itemData.properties.description || null,
-          content: itemData.properties.content || null,
-          author: itemData.properties.article?.author || null,
-          publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
-          imageUrl: imageUrl,
-          enrichments: itemData.enrichments || null,
-          evaluations: itemData.evaluations || null,
-        }
-      });
-
-      console.log(`Saved enriched item ${itemData.id} to database`);
-    } catch (error) {
-      console.error('Error saving to database:', error);
+        await prisma.webset.upsert({
+          where: { websetId: websetData.id },
+          update: {},
+          create: {
+            websetId: websetData.id,
+            name: websetName,
+          }
+        });
+        console.log(`Created webset ${websetData.id} with name '${websetName}' in DB`);
+      } catch (error) {
+        console.error('Error handling webset.created:', error);
+        return NextResponse.json({ error: 'DB error' }, { status: 500 });
+      }
+      break;
     }
+    case 'webset.item.enriched': {
+      try {
+        const itemData = body.data;
+        // Ensure the webset exists in our DB
+        const dbWebset = await prisma.webset.findUnique({ where: { websetId: itemData.websetId } });
+        if (!dbWebset) {
+          console.error(`webset.item.enriched: Webset ${itemData.websetId} does not exist in DB`);
+          return NextResponse.json({ error: 'Webset does not exist in DB' }, { status: 400 });
+        }
+        const imageUrl = await extractImagesFromUrl(itemData.properties.url);
+        await prisma.websetItem.upsert({
+          where: { itemId: itemData.id },
+          update: {
+            url: itemData.properties.url,
+            title: itemData.properties.article?.title || null,
+            description: itemData.properties.description || null,
+            content: itemData.properties.content || null,
+            author: itemData.properties.article?.author || null,
+            publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
+            imageUrl: imageUrl,
+            enrichments: itemData.enrichments || null,
+            evaluations: itemData.evaluations || null,
+            updatedAt: new Date(),
+          },
+          create: {
+            itemId: itemData.id,
+            websetId: itemData.websetId,
+            url: itemData.properties.url,
+            title: itemData.properties.article?.title || null,
+            description: itemData.properties.description || null,
+            content: itemData.properties.content || null,
+            author: itemData.properties.article?.author || null,
+            publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
+            imageUrl: imageUrl,
+            enrichments: itemData.enrichments || null,
+            evaluations: itemData.evaluations || null,
+          }
+        });
+        console.log(`Saved enriched item ${itemData.id} to database`);
+      } catch (error) {
+        console.error('Error handling webset.item.enriched:', error);
+        return NextResponse.json({ error: 'DB error' }, { status: 500 });
+      }
+      break;
+    }
+    default:
+      // Optionally handle other event types
+      break;
   }
 
   return NextResponse.json({ 
