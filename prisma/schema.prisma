@@ -33,6 +33,7 @@ model WebsetItem {
   content      String?  @db.Text
   author       String?
   publishedAt  DateTime?
+  imageUrl     String?
   enrichments  Json?
   evaluations  Json?
   createdAt    DateTime @default(now())
