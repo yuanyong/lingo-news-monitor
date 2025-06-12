@@ -1,36 +1,82 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Websets News Monitor
 
-## Getting Started
+A Next.js application that monitors Exa websets using webhooks.
 
-First, run the development server:
+## Setup
 
+### Prerequisites
+
+- Node.js 18+ installed
+- An Exa API key from [Exa](https://exa.ai)
+- (Optional) A Smee.io channel for local webhook development
+
+### Installation
+
+1. Clone the repository and install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Copy `.env.example` to `.env.local` and configure:
+```bash
+cp .env.example .env.local
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. Edit `.env.local` with your values:
+```env
+EXA_API_KEY=your-exa-api-key-here
+WEBHOOK_URL=https://smee.io/your-channel-id
+WEBHOOK_SECRET=will-be-generated-by-setup
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Running Locally with Smee.io
 
-## Learn More
+1. **Set up Smee.io webhook forwarding** (Terminal 1):
+```bash
+npx smee -u https://smee.io/your-channel-id -t http://localhost:3000/api/webhook
+```
 
-To learn more about Next.js, take a look at the following resources:
+2. **Run the setup script** (Terminal 2):
+```bash
+npm run setup
+```
+This will:
+- Create a webhook that listens for all webset events
+- Display a webhook secret that you need to save
+- Create a sample webset
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Update your `.env.local` with the webhook secret**:
+```env
+WEBHOOK_SECRET=<secret-displayed-by-setup>
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+4. **Start the Next.js development server** (Terminal 3):
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+Now your app will receive webhook events from Exa as websets are processed.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Running in Production
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For production, set `WEBHOOK_URL` to your actual webhook endpoint:
+```env
+WEBHOOK_URL=https://your-domain.com/api/webhook
+```
+
+## Webhook Events
+
+The application logs all webhook events, including:
+- `webset.created` - When a webset is created
+- `webset.idle` - When a webset finishes processing
+- `webset.search.completed` - When search completes
+- `webset.item.created` - When an item is found
+- `webset.item.enriched` - When an item is enriched
+- And more...
+
+## Scripts
+
+- `npm run dev` - Start development server
+- `npm run setup` - Create webhook and sample webset
+- `npm run build` - Build for production
+- `npm run start` - Start production server
