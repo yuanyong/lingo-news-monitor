@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyWebhookSignature } from '@/lib/webhook';
-import { extractImagesFromUrl } from '@/lib/exa';
+import { exa } from '@/lib/exa';
 
 export async function POST(request: NextRequest) {
   // Get the raw body for signature verification
@@ -57,33 +57,38 @@ export async function POST(request: NextRequest) {
           console.error(`webset.item.enriched: Webset ${itemData.websetId} does not exist in DB`);
           return NextResponse.json({ error: 'Webset does not exist in DB' }, { status: 400 });
         }
-        const imageUrl = await extractImagesFromUrl(itemData.properties.url);
+        const response = await exa.getContents(
+            [itemData.properties.url],
+            {
+              livecrawl: "fallback",
+              livecrawlTimeout: 10000
+            }
+        );
+        const crawlData = response.results[0];
+
+        const itemFields = {
+          url: itemData.properties.url,
+          title: itemData.properties.article?.title || null,
+          description: itemData.properties.description || null,
+          content: itemData.properties.content || null,
+          author: itemData.properties.article?.author || crawlData.author || null,
+          publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
+          imageUrl: crawlData?.image || null,
+          faviconUrl: crawlData?.favicon || null,
+          enrichments: itemData.enrichments || null,
+          evaluations: itemData.evaluations || null,
+        };
+
         await prisma.websetItem.upsert({
           where: { itemId: itemData.id },
           update: {
-            url: itemData.properties.url,
-            title: itemData.properties.article?.title || null,
-            description: itemData.properties.description || null,
-            content: itemData.properties.content || null,
-            author: itemData.properties.article?.author || null,
-            publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
-            imageUrl: imageUrl,
-            enrichments: itemData.enrichments || null,
-            evaluations: itemData.evaluations || null,
+            ...itemFields,
             updatedAt: new Date(),
           },
           create: {
             itemId: itemData.id,
             websetId: itemData.websetId,
-            url: itemData.properties.url,
-            title: itemData.properties.article?.title || null,
-            description: itemData.properties.description || null,
-            content: itemData.properties.content || null,
-            author: itemData.properties.article?.author || null,
-            publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
-            imageUrl: imageUrl,
-            enrichments: itemData.enrichments || null,
-            evaluations: itemData.evaluations || null,
+            ...itemFields,
           }
         });
         console.log(`Saved enriched item ${itemData.id} to database`);
@@ -94,7 +99,6 @@ export async function POST(request: NextRequest) {
       break;
     }
     default:
-      // Optionally handle other event types
       break;
   }
 
