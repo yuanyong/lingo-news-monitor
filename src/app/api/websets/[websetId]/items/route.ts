@@ -11,7 +11,7 @@ export async function GET(
         websetId: params.websetId
       },
       orderBy: {
-        createdAt: 'desc'
+        publishedAt: 'desc'
       }
     });
     return NextResponse.json(items);

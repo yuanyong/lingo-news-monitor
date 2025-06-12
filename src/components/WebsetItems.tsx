@@ -33,7 +33,7 @@ async function getWebsetItems(websetId: string): Promise<WebsetItem[]> {
       websetId: websetId
     },
     orderBy: {
-      createdAt: 'desc'
+      publishedAt: 'desc'
     }
   });
 }
@@ -72,7 +72,7 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
         <div key={groupIndex}>
           {group.length === 1 ? (
             // Full width item
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-shadow hover:shadow-md">
               {group[0].imageUrl && (
                 <div className="relative h-48 w-full overflow-hidden bg-gray-50">
                   <Image 
@@ -86,7 +86,7 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                 </div>
               )}
               <div className="p-6 flex flex-col">
-                <h3 className="font-semibold text-2xl mb-3 line-clamp-2">
+                <h3 className="font-medium text-2xl mb-3 line-clamp-2">
                   <a 
                     href={group[0].url} 
                     target="_blank" 
@@ -116,7 +116,7 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                   </div>
                   
                   {group[0].publishedAt && (
-                    <time dateTime={group[0].publishedAt} className="flex-shrink-0 ml-2">
+                    <time dateTime={new Date(group[0].publishedAt).toISOString()} className="flex-shrink-0 ml-2">
                       {formatDistanceToNowStrict(new Date(group[0].publishedAt), { addSuffix: false })} ago
                     </time>
                   )}
@@ -127,7 +127,7 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
             // Three column items
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {group.map((item) => (
-                <div key={item.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div key={item.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-shadow hover:shadow-md">
                   {item.imageUrl && (
                     <div className="relative aspect-video w-full overflow-hidden bg-gray-50">
                       <Image 
@@ -141,7 +141,7 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                   )}
                   
                   <div className="p-4 flex flex-col">
-                    <h3 className="font-semibold text-lg mb-2 line-clamp-2">
+                    <h3 className="font-medium text-lg mb-2 line-clamp-2">
                       <a 
                         href={item.url} 
                         target="_blank" 
@@ -171,7 +171,7 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                       </div>
                       
                       {item.publishedAt && (
-                        <time dateTime={item.publishedAt} className="flex-shrink-0 ml-2">
+                        <time dateTime={new Date(item.publishedAt).toISOString()} className="flex-shrink-0 ml-2">
                           {formatDistanceToNowStrict(new Date(item.publishedAt), {addSuffix: false})} ago
                         </time>
                       )}
