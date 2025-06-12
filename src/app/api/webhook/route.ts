@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import { prisma } from '@/lib/prisma';
 
 function verifyWebhookSignature(payload: string, signatureHeader: string, webhookSecret: string): boolean {
   try {
@@ -59,6 +60,55 @@ export async function POST(request: NextRequest) {
   
   // Concise logging
   console.log(`[${body.type}]`, body.data);
+
+  // Handle webset.item.enriched events
+  if (body.type === 'webset.item.enriched') {
+    try {
+      const itemData = body.data;
+      
+      // First, ensure the webset exists
+      await prisma.webset.upsert({
+        where: { websetId: itemData.websetId },
+        update: {},
+        create: {
+          websetId: itemData.websetId,
+          name: `Webset ${itemData.websetId}`, // Default name, can be updated later
+        }
+      });
+
+      // Save the enriched item
+      await prisma.websetItem.upsert({
+        where: { itemId: itemData.id },
+        update: {
+          url: itemData.properties.url,
+          title: itemData.properties.article?.title || null,
+          description: itemData.properties.description || null,
+          content: itemData.properties.content || null,
+          author: itemData.properties.article?.author || null,
+          publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
+          enrichments: itemData.enrichments || null,
+          evaluations: itemData.evaluations || null,
+          updatedAt: new Date(),
+        },
+        create: {
+          itemId: itemData.id,
+          websetId: itemData.websetId,
+          url: itemData.properties.url,
+          title: itemData.properties.article?.title || null,
+          description: itemData.properties.description || null,
+          content: itemData.properties.content || null,
+          author: itemData.properties.article?.author || null,
+          publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
+          enrichments: itemData.enrichments || null,
+          evaluations: itemData.evaluations || null,
+        }
+      });
+
+      console.log(`Saved enriched item ${itemData.id} to database`);
+    } catch (error) {
+      console.error('Error saving to database:', error);
+    }
+  }
 
   return NextResponse.json({ 
     received: true,

@@ -51,13 +51,13 @@ async function main() {
   // Create a Webset with search and enrichments
   const webset = await exa.websets.create({
     search: {
-      query: "Top AI research labs focusing on large language models",
+      query: "News about AI startups raising a seed round in the last 24 hours",
       count: 10
     },
     enrichments: [
       {
-        description: "Estimate the company's founding year",
-        format: "number"
+        description: "One sentance summary of the article",
+        format: "text",
       }
     ],
   });

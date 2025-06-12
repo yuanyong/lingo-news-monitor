@@ -1,0 +1,40 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Webset {
+  id        String   @id @default(cuid())
+  websetId  String   @unique
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  items     WebsetItem[]
+}
+
+model WebsetItem {
+  id           String   @id @default(cuid())
+  itemId       String   @unique
+  websetId     String
+  webset       Webset   @relation(fields: [websetId], references: [websetId])
+  url          String   @unique
+  title        String?
+  description  String?
+  content      String?  @db.Text
+  author       String?
+  publishedAt  DateTime?
+  enrichments  Json?
+  evaluations  Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
