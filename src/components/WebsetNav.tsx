@@ -12,15 +12,15 @@ export default function WebsetNav({ websets, selectedWebsetId }: WebsetNavProps)
   }
 
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2">
+    <div className="flex gap-2 overflow-x-auto">
       {websets.map((webset) => (
         <Link
           key={webset.id}
           href={`/?websetId=${webset.websetId}`}
-          className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm transition-colors ${
+          className={`flex-shrink-0 px-3 py-1.5 rounded-full text-sm transition-colors cursor-pointer ${
             selectedWebsetId === webset.websetId
-              ? 'bg-blue-500 text-white'
-              : 'bg-gray-100 hover:bg-gray-200'
+              ? 'bg-blue-500 text-white font-bold'
+              : 'hover:border-gray-300 border border-secondary-default'
           }`}
         >
           {webset.name}

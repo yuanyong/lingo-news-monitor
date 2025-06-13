@@ -1,5 +1,8 @@
 import * as dotenv from "dotenv";
 import Exa from "exa-js";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 dotenv.config({ path: '.env.local' });
 if (!process.env.EXA_API_KEY) {
@@ -30,7 +33,20 @@ async function deleteAll() {
     console.log(`Deleted webset with ID: ${webset.id}`);
   }
 
-  console.log("All webhooks, monitors, and websets have been deleted.");
+  console.log("All webhooks, monitors, and websets have been deleted from Exa API.");
+
+  // Delete all webset items from database
+  console.log("\n--- Deleting webset items from database ---");
+  const deletedItems = await prisma.websetItem.deleteMany({});
+  console.log(`Deleted ${deletedItems.count} webset items from database`);
+
+  // Delete all websets from database
+  console.log("\n--- Deleting websets from database ---");
+  const deletedWebsets = await prisma.webset.deleteMany({});
+  console.log(`Deleted ${deletedWebsets.count} websets from database`);
+
+  await prisma.$disconnect();
+  console.log("\nAll data deleted from both Exa API and database.");
 }
 
 deleteAll();

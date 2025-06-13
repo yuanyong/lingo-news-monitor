@@ -67,12 +67,17 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
   }
 
   return (
-    <div className="mt-6 space-y-4">
+    <div className="space-y-4">
       {groupedItems.map((group, groupIndex) => (
         <div key={groupIndex}>
           {group.length === 1 ? (
             // Full width item
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-shadow hover:shadow-md">
+            <a 
+              href={group[0].url} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block bg-white rounded-xl border border-gray-200 overflow-hidden transition-shadow hover:shadow-md cursor-pointer group"
+            >
               {group[0].imageUrl && (
                 <div className="relative h-48 w-full overflow-hidden bg-gray-50">
                   <Image 
@@ -86,15 +91,8 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                 </div>
               )}
               <div className="p-6 flex flex-col">
-                <h3 className="font-medium text-2xl mb-3 line-clamp-2">
-                  <a 
-                    href={group[0].url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="hover:text-blue-600 transition-colors"
-                  >
-                    {group[0].title || 'Untitled'}
-                  </a>
+                <h3 className="font-medium text-2xl mb-3 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                  {group[0].title || 'Untitled'}
                 </h3>
                 
                 <p className="text-base text-gray-600 mb-4 line-clamp-3">
@@ -122,12 +120,18 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                   )}
                 </div>
               </div>
-            </div>
+            </a>
           ) : (
             // Three column items
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {group.map((item) => (
-                <div key={item.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden transition-shadow hover:shadow-md">
+                <a 
+                  key={item.id} 
+                  href={item.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block bg-white rounded-xl border border-gray-200 overflow-hidden transition-shadow hover:shadow-md cursor-pointer group"
+                >
                   {item.imageUrl && (
                     <div className="relative aspect-video w-full overflow-hidden bg-gray-50">
                       <Image 
@@ -141,15 +145,8 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                   )}
                   
                   <div className="p-4 flex flex-col">
-                    <h3 className="font-medium text-lg mb-2 line-clamp-2">
-                      <a 
-                        href={item.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="hover:text-blue-600 transition-colors"
-                      >
-                        {item.title || 'Untitled'}
-                      </a>
+                    <h3 className="font-medium text-lg mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                      {item.title || 'Untitled'}
                     </h3>
                     
                     <p className="text-sm text-gray-600 mb-3 min-h-[3.75rem] line-clamp-3">
@@ -177,7 +174,7 @@ export default async function WebsetItems({ websetId }: { websetId: string }) {
                       )}
                     </div>
                   </div>
-                </div>
+                </a>
               ))}
             </div>
           )}

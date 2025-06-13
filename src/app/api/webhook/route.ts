@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
     }
     case 'webset.item.enriched': {
       try {
+        // TODO: Dedupe with semantic sim + llm on insert
         const itemData = body.data;
         // Ensure the webset exists in our DB
         const dbWebset = await prisma.webset.findUnique({ where: { websetId: itemData.websetId } });
@@ -57,6 +58,8 @@ export async function POST(request: NextRequest) {
           console.error(`webset.item.enriched: Webset ${itemData.websetId} does not exist in DB`);
           return NextResponse.json({ error: 'Webset does not exist in DB' }, { status: 400 });
         }
+
+        // TODO: Maybe different api for more reliable image and author
         const response = await exa.getContents(
             [itemData.properties.url],
             {
