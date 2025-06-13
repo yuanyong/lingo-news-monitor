@@ -89,6 +89,24 @@ const websets = [
         description: "Article was published in the last week"
       }
     ]
+  },
+  {
+    name: "Positive",
+    query: "Positive and uplifting news stories from the last week",
+    criteria: [
+      {
+        description: "Content highlights genuinely uplifting, inspiring, or feel-good news, not clickbait or spammy lists",
+      },
+      {
+        description: "Stories published by reputable outlets known for quality journalism (e.g., BBC, NPR, The Guardian, AP)",
+      },
+      {
+        description: "Article focuses on real-world positive impact, achievements, community successes, or heartwarming events",
+      },
+      {
+        description: "Article was published in the last week",
+      }
+    ]
   }
 ];
 

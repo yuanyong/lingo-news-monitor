@@ -18,6 +18,7 @@
   "dependencies": {
     "@prisma/client": "^6.9.0",
     "date-fns": "^4.1.0",
+    "date-fns-tz": "^3.2.0",
     "exa-js": "^1.8.8",
     "next": "15.3.3",
     "openai": "^5.3.0",
