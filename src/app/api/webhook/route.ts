@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyWebhookSignature } from '@/lib/webhook';
 import { exa } from '@/lib/exa';
+import { embedText } from '@/lib/openai';
 
 export async function POST(request: NextRequest) {
   // Get the raw body for signature verification
@@ -69,9 +70,12 @@ export async function POST(request: NextRequest) {
         );
         const crawlData = response.results[0];
 
+        const title = itemData.properties.article?.title;
+        const embedding = await embedText(title);
+
         const itemFields = {
           url: itemData.properties.url,
-          title: itemData.properties.article?.title || null,
+          title: title || null,
           description: itemData.properties.description || null,
           content: itemData.properties.content || null,
           author: itemData.properties.article?.author || crawlData.author || null,
@@ -82,6 +86,7 @@ export async function POST(request: NextRequest) {
           evaluations: itemData.evaluations || null,
         };
 
+        // First upsert without embedding
         await prisma.websetItem.upsert({
           where: { itemId: itemData.id },
           update: {
@@ -94,6 +99,13 @@ export async function POST(request: NextRequest) {
             ...itemFields,
           }
         });
+
+        // Update with embedding using raw SQL if we have one
+        await prisma.$executeRawUnsafe(`
+          UPDATE "WebsetItem" 
+          SET embedding = $1::vector 
+          WHERE "itemId" = $2
+        `, `[${embedding.join(',')}]`, itemData.id);
         console.log(`Saved enriched item ${itemData.id} to database`);
       } catch (error) {
         console.error('Error handling webset.item.enriched:', error);

@@ -1,9 +1,11 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
+  extensions = [vector]
   url      = env("DATABASE_URL")
 }
 
@@ -33,4 +35,5 @@ model WebsetItem {
   imageUrl    String?
   faviconUrl  String?
   webset      Webset    @relation(fields: [websetId], references: [websetId])
+  embedding Unsupported("vector(1536)")?
 }
