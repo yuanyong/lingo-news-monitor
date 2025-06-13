@@ -33,12 +33,11 @@ export async function POST(request: NextRequest) {
           console.error(`webset.created event missing metadata.name for websetId ${websetData.id}`);
           return NextResponse.json({ error: 'Missing webset name' }, { status: 400 });
         }
-        await prisma.webset.upsert({
-          where: { websetId: websetData.id },
-          update: {},
-          create: {
+        await prisma.webset.create({
+          data: {
             websetId: websetData.id,
             name: websetName,
+            data: websetData,
           }
         });
         console.log(`Created webset ${websetData.id} with name '${websetName}' in DB`);

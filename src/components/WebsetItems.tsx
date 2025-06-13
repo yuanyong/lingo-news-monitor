@@ -86,25 +86,33 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
   }, [websetId, page]);
 
   if (loading) {
-    return <WebsetItemsSkeleton />;
+    return (
+      <div className="max-w-4xl mx-auto">
+        <WebsetItemsSkeleton />
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-red-500 mt-4">Error: {error}</div>;
+    return (
+      <div className="max-w-4xl mx-auto">
+        <div className="text-red-500 mt-4">Error: {error}</div>
+      </div>
+    );
   }
 
   if (!data || data.items.length === 0) {
-    return <p className="text-gray-500 mt-4">No items found for this webset.</p>;
+    return (
+      <div className="max-w-4xl mx-auto">
+        <p className="text-gray-500 mt-4">No items found for this webset.</p>
+      </div>
+    );
   }
 
   const { items, hasMore } = data;
 
-  if (items.length === 0) {
-    return <p className="text-gray-500 mt-4">No items found for this webset.</p>;
-  }
-
   return (
-    <div>
+    <div className="max-w-4xl mx-auto">
       <div className="border-t border-gray-200 divide-y divide-gray-200">
         {items.map((item, index) => (
           <a 
@@ -164,7 +172,7 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
                 )}
                 {item.author && item.publishedAt && <span>•</span>}
                 {item.publishedAt && (
-                  <time dateTime={new Date(item.publishedAt).toISOString()}>
+                  <time dateTime={new Date(item.publishedAt).toISOString()} className="whitespace-nowrap">
                     {formatDistanceToNowStrict(new Date(item.publishedAt), { addSuffix: true })}
                   </time>
                 )}
@@ -176,7 +184,7 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
       
       {/* More button - only show if we have the full page of items and there are more */}
       {items.length === data.limit && hasMore && (
-        <div className="my-6 text-center">
+        <div className="my-4 text-center">
           <Link
             href={`/?websetId=${websetId}&page=${page + 1}`}
             className="text-gray-700 hover:text-blue-600 transition-colors"

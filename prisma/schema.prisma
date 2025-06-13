@@ -13,6 +13,7 @@ model Webset {
   id        String       @id @default(cuid())
   websetId  String       @unique
   name      String
+  data      Json?
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   items     WebsetItem[]

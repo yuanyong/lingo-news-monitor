@@ -3,9 +3,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET(
   request: Request,
-  { params }: { params: { websetId: string } }
+  { params }: { params: Promise<{ websetId: string }> }
 ) {
   try {
+    const { websetId } = await params;
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1', 10);
     const limit = 10;
@@ -14,7 +15,7 @@ export async function GET(
     // Get one extra item to check if there are more
     const items = await prisma.websetItem.findMany({
       where: {
-        websetId: params.websetId,
+        websetId: websetId,
         NOT: [
           { imageUrl: null },
           { imageUrl: "" },

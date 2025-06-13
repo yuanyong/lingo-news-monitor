@@ -36,14 +36,14 @@ export default function RootLayout({
       <body
         className={`${abcdDiatype.variable} ${reckless.variable} antialiased`}
       >
-        <div className="min-h-screen flex flex-col relative">
+        <div className="min-h-screen flex flex-col relative pb-16">
           {/* Main Content */}
           <main className="flex-1 w-full">
             {children}
           </main>
 
           {/* Footer */}
-          <footer className="w-full py-4 bg-secondary-default border-t border-gray-200">
+          <footer className="fixed bottom-0 left-0 right-0 w-full py-4 bg-secondary-default border-t border-gray-200">
             <div className="max-w-2xl mx-auto flex items-center justify-center px-4 gap-4">
               <Link
                 href="https://github.com/exa-labs/websets-news-monitor"
@@ -51,27 +51,25 @@ export default function RootLayout({
                 rel="origin"
                 className="text-gray-600 hover:underline cursor-pointer text-center"
               >
-                View Project Code
+                Source Code
               </Link>
               <span className="text-gray-400">|</span>
               <Link
                 href="https://exa.ai/demos"
                 target="_blank"
                 rel="origin"
+                className="text-gray-600 hover:underline"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-600 hover:text-gray-600 hover:underline">See More Demos</span>
-                </div>
+                More Demos
               </Link>
               <span className="text-gray-400">|</span>
               <Link
                 href="https://dashboard.exa.ai"
                 target="_blank"
                 rel="origin"
+                className="text-gray-600 hover:underline"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-600 hover:text-gray-600 hover:underline">Try Exa API</span>
-                </div>
+                Exa API
               </Link>
             </div>
           </footer>

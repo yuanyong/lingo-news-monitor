@@ -11,17 +11,14 @@ export default async function Home({
   const params = await searchParams;
   const websets = await prisma.webset.findMany();
   const selectedWebsetId = params.websetId || websets[0]?.websetId;
+  const selectedWebset = websets.find(w => w.websetId === selectedWebsetId);
   const page = parseInt(params.page || '1', 10);
 
   return (
-    <div>
+    <div className='px-4'>
       <Header />
-      <div className="max-w-4xl mx-auto py-4">
-        <WebsetNav websets={websets} selectedWebsetId={selectedWebsetId} />
-      </div>
-      <div className="max-w-4xl mx-auto">
-        {selectedWebsetId && <WebsetItems websetId={selectedWebsetId} page={page} />}
-      </div>
+      <WebsetNav websets={websets} selectedWebsetId={selectedWebsetId} />
+      {selectedWebsetId && <WebsetItems websetId={selectedWebsetId} page={page} />}
     </div>
   );
 }
