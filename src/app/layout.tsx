@@ -46,7 +46,7 @@ export default function RootLayout({
           <footer className="w-full py-4 bg-secondary-default border-t border-gray-200">
             <div className="max-w-2xl mx-auto flex items-center justify-center px-4 gap-4">
               <Link
-                href="https://github.com/exa-labs/company-researcher"
+                href="https://github.com/exa-labs/websets-news-monitor"
                 target="_blank"
                 rel="origin"
                 className="text-gray-600 hover:underline cursor-pointer text-center"

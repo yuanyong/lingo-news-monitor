@@ -6,11 +6,12 @@ import WebsetItems from '@/components/WebsetItems';
 export default async function Home({
   searchParams
 }: {
-  searchParams: Promise<{ websetId?: string }>
+  searchParams: Promise<{ websetId?: string, page?: string }>
 }) {
   const params = await searchParams;
   const websets = await prisma.webset.findMany();
   const selectedWebsetId = params.websetId || websets[0]?.websetId;
+  const page = parseInt(params.page || '1', 10);
 
   return (
     <div>
@@ -18,8 +19,8 @@ export default async function Home({
       <div className="max-w-4xl mx-auto py-4">
         <WebsetNav websets={websets} selectedWebsetId={selectedWebsetId} />
       </div>
-      <div className="max-w-4xl mx-auto pb-4">
-        {selectedWebsetId && <WebsetItems websetId={selectedWebsetId} />}
+      <div className="max-w-4xl mx-auto">
+        {selectedWebsetId && <WebsetItems websetId={selectedWebsetId} page={page} />}
       </div>
     </div>
   );
