@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/prisma';
+import Header from '@/components/Header';
 import WebsetNav from '@/components/WebsetNav';
 import WebsetItems from '@/components/WebsetItems';
-import NextUpdateCountdown from '@/components/NextUpdateCountdown';
 
 export default async function Home({
   searchParams
@@ -14,14 +14,7 @@ export default async function Home({
 
   return (
     <div>
-      <div className="border-b border-gray-200">
-        <div className="max-w-4xl mx-auto py-2">
-          <div className="flex items-center justify-between">
-            <h2 className="text-3xl font-medium">Semantic <span className='text-brand-default'>Web Monitor</span></h2>
-            <NextUpdateCountdown />
-          </div>
-        </div>
-      </div>
+      <Header />
       <div className="max-w-4xl mx-auto py-4">
         <WebsetNav websets={websets} selectedWebsetId={selectedWebsetId} />
       </div>
