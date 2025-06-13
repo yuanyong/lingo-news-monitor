@@ -11,7 +11,7 @@ if (!process.env.EXA_API_KEY) {
 const websets = [
   {
     name: "Startup Funding",
-    query: "Startups that raised a funding round in the last month",
+    query: "Startups that raised a funding round in the last week",
     criteria: [
       {
         description: "Article is about a startup raising a funding round of at leas $1M",
@@ -20,28 +20,31 @@ const websets = [
         description: "Article published in a top 20 tech publication (TechCrunch, The Verge, Wired, etc.)",
       },
       {
-        description: "Article was published in the last month",
+        description: "Article was published in the last week",
       }
     ]
   },
   {
     name: "Futurism",
-    query: "Articles about the future of technology, cutting edge research, and long term tech predictions",
+    query: "Articles about the future of technology, cutting edge research, and long term tech predictions from the last week",
     criteria: [
       {
         description: "Content discusses trends, predictions, or innovations expected to have significant impact in the future (5+ years)",
       },
       {
+        description: "Content is about far out tech and novel research, not day to day tech news or product updates",
+      },
+      {
         description: "Article published in a leading technology, science, or futurism publication (e.g., Wired, MIT Technology Review, Futurism, Singularity Hub, New Scientist)"
       },
       {
-        description: "Article was published in the last month",
+        description: "Article was published in the last week",
       }
     ]
   },
   {
     name: "Memes",
-    query: "Articles about viral internet trends on social medial platforms from the last month",
+    query: "Articles about viral internet trends on social medial platforms from the last week",
     criteria: [
       {
         description: "Content discusses viral trends, memes, or cultural phenomena that originated on social media platforms",
@@ -53,7 +56,7 @@ const websets = [
         description: "The article is about a specific meme, trend, or cultural phenomenon and not a list or generic overview",
       },
       {
-        description: "Article was published in the last month",
+        description: "Article was published in the last week",
       }
     ]
   },
@@ -74,7 +77,7 @@ const websets = [
   },
   {
     name: "Product Launches",
-    query: "Major product launches or announcements from widely recognized companies in hardware or software",
+    query: "Major product launches or announcements from widely recognized companies in hardware or software fron the last week",
     criteria: [
       {
         description: "Content is about a new product release or major product update from a company that is widely recognized (hardware or software)"
@@ -112,17 +115,7 @@ async function main() {
     url: webhookUrl,
     events: [
       EventType.webset_created,
-      EventType.webset_deleted,
-      EventType.webset_paused,
-      EventType.webset_idle,
-      EventType.webset_search_created,
-      EventType.webset_search_canceled,
-      EventType.webset_search_completed,
-      EventType.webset_search_updated,
-      EventType.webset_item_created,
       EventType.webset_item_enriched,
-      EventType.webset_export_created,
-      EventType.webset_export_completed
     ],
   });
 

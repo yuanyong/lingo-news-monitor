@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { verifyWebhookSignature } from '@/lib/webhook';
 import { exa } from '@/lib/exa';
 import { embedText } from '@/lib/openai';
+import { isDuplicate } from '@/lib/dedupe';
 
 export async function POST(request: NextRequest) {
   // Get the raw body for signature verification
@@ -19,8 +20,6 @@ export async function POST(request: NextRequest) {
       console.error('Invalid webhook signature');
       return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
     }
-  } else if (isDevelopment && webhookSecret) {
-    console.log('[Dev] Skipping webhook signature verification');
   }
 
   const body = JSON.parse(rawBody);
@@ -51,7 +50,6 @@ export async function POST(request: NextRequest) {
     }
     case 'webset.item.enriched': {
       try {
-        // TODO: Dedupe with semantic sim + llm on insert
         const itemData = body.data;
         // Ensure the webset exists in our DB
         const dbWebset = await prisma.webset.findUnique({ where: { websetId: itemData.websetId } });
@@ -72,6 +70,16 @@ export async function POST(request: NextRequest) {
 
         const title = itemData.properties.article?.title;
         const embedding = await embedText(title);
+
+        // Check if this is a duplicate before inserting
+        if (await isDuplicate(title, itemData.websetId, embedding)) {
+          console.log(`Skipping duplicate item: ${title}`);
+          return NextResponse.json({
+            received: true,
+            type: body.type,
+            timestamp: new Date().toISOString(),
+          });
+        }
 
         const itemFields = {
           url: itemData.properties.url,
