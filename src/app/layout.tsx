@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import Link from "next/link";
+import { Analytics } from "@vercel/analytics/next";
 
 // Load the ABCDiatype font (Regular and Bold only)
 const abcdDiatype = localFont({
@@ -86,6 +87,7 @@ export default function RootLayout({
           </footer>
 
         </div>
+        <Analytics />
       </body>
     </html>
   );
