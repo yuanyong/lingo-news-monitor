@@ -2,7 +2,7 @@
 
 import { Webset } from '@prisma/client';
 import { useState, useEffect } from 'react';
-import { X, ExternalLink, BookOpen, Github } from 'lucide-react';
+import { X, BookOpen, Github } from 'lucide-react';
 
 interface InfoCardProps {
   webset: Webset;

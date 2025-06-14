@@ -28,7 +28,6 @@ export default function CodeModal({ isOpen, onClose, webset }: CodeModalProps) {
   };
 
   const websetData = webset?.data as any;
-  const websetName = webset?.name || 'My Webset';
   const query = websetData?.searches?.[0]?.query || 'Your search query here';
   const criteriaObjs = websetData?.searches?.[0]?.criteria || [];
   const criteria = criteriaObjs.map((c: any) => typeof c === 'string' ? c : c.description || 'Your criteria here');
