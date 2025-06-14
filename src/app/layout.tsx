@@ -23,8 +23,8 @@ const reckless = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Websets News Monitor",
-  description: "Monitor news and updates from your websets",
+  title: "Semantic Web Monitor",
+  description: "Monitor the web semantically with Websets",
 };
 
 export default function RootLayout({
@@ -53,7 +53,7 @@ export default function RootLayout({
                   rel="origin"
                   className="text-gray-600 hover:underline cursor-pointer text-center"
                 >
-                  Source Code
+                  GitHub
                 </Link>
                 <span className="text-gray-400">|</span>
                 <Link
