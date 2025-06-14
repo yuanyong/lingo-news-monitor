@@ -44,33 +44,44 @@ export default function RootLayout({
 
           {/* Footer */}
           <footer className="fixed bottom-0 left-0 right-0 w-full py-4 bg-secondary-default border-t border-gray-200">
-            <div className="max-w-2xl mx-auto flex items-center justify-center px-4 gap-4">
-              <Link
-                href="https://github.com/exa-labs/websets-news-monitor"
+            <div className="max-w-2xl mx-auto px-4">
+              <div className="flex items-center justify-center gap-4">
+                <Link
+                  href="https://github.com/exa-labs/websets-news-monitor"
+                  target="_blank"
+                  rel="origin"
+                  className="text-gray-600 hover:underline cursor-pointer text-center"
+                >
+                  Source Code
+                </Link>
+                <span className="text-gray-400">|</span>
+                <Link
+                  href="https://exa.ai/demos"
+                  target="_blank"
+                  rel="origin"
+                  className="text-gray-600 hover:underline"
+                >
+                  More Demos
+                </Link>
+                <span className="text-gray-400">|</span>
+                <Link
+                  href="https://dashboard.exa.ai"
+                  target="_blank"
+                  rel="origin"
+                  className="text-gray-600 hover:underline"
+                >
+                  Exa API
+                </Link>
+              </div>
+              <a 
+                href="https://exa.ai"
                 target="_blank"
-                rel="origin"
-                className="text-gray-600 hover:underline cursor-pointer text-center"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-2 hover:text-gray-700 transition-colors"
               >
-                Source Code
-              </Link>
-              <span className="text-gray-400">|</span>
-              <Link
-                href="https://exa.ai/demos"
-                target="_blank"
-                rel="origin"
-                className="text-gray-600 hover:underline"
-              >
-                More Demos
-              </Link>
-              <span className="text-gray-400">|</span>
-              <Link
-                href="https://dashboard.exa.ai"
-                target="_blank"
-                rel="origin"
-                className="text-gray-600 hover:underline"
-              >
-                Exa API
-              </Link>
+                <span>Powered by</span>
+                <img src="/exa_logo.png" alt="Exa" className="h-4" />
+              </a>
             </div>
           </footer>
 

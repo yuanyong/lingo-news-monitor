@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/prisma';
 import Header from '@/components/Header';
+import InfoCard from '@/components/InfoCard';
 import WebsetNav from '@/components/WebsetNav';
 import WebsetItems from '@/components/WebsetItems';
 
@@ -18,6 +19,7 @@ export default async function Home({
     <div className='px-4'>
       <Header />
       <WebsetNav websets={websets} selectedWebsetId={selectedWebsetId} />
+      {selectedWebset && <InfoCard webset={selectedWebset} />}
       {selectedWebsetId && <WebsetItems websetId={selectedWebsetId} page={page} />}
     </div>
   );

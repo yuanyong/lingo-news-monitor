@@ -37,7 +37,7 @@ function NextUpdateCountdown() {
   }, []);
 
   return (
-    <div className="text-xs text-gray-500 font-mono">
+    <div className="text-xs text-gray-500 font-mono text-right">
       Update in:{' '}
       <span>{timeRemaining}</span>
     </div>

@@ -49,8 +49,8 @@ export default function WebsetNav({ websets, selectedWebsetId }: WebsetNavProps)
               onClick={() => setIsCodeModalOpen(true)}
               className="flex-shrink-0 px-3 py-1 bg-secondary-faint border border-gray-200 text-gray-700 text-sm rounded hover:shadow-sm transition-colors flex items-center gap-1"
             >
-              Get Code
               <Code size={14} />
+              Get Code
             </button>
           </div>
         </div>
