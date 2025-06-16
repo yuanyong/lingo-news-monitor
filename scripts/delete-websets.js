@@ -9,17 +9,11 @@ if (!process.env.EXA_API_KEY) {
   throw new Error("EXA_API_KEY is not set in the environment variables.");
 }
 
-async function deleteAll() {
+async function deleteWebsets() {
   const exa = new Exa(process.env.EXA_API_KEY);
 
-  // Delete all webhooks
-  const webhooks = await exa.websets.webhooks.list();
-  for (const webhook of webhooks.data) {
-    await exa.websets.webhooks.delete(webhook.id);
-    console.log(`Deleted webhook with ID: ${webhook.id}`);
-  }
-
   // Delete all monitors
+  console.log('--- Deleting monitors ---');
   const monitors = await exa.websets.monitors.list();
   for (const monitor of monitors.data) {
     await exa.websets.monitors.delete(monitor.id);
@@ -27,13 +21,14 @@ async function deleteAll() {
   }
 
   // Delete all websets
+  console.log('\n--- Deleting websets ---');
   const websets = await exa.websets.list();
   for (const webset of websets.data) {
     await exa.websets.delete(webset.id);
-    console.log(`Deleted webset with ID: ${webset.id}`);
+    console.log(`Deleted webset "${webset.metadata?.name || 'unnamed'}" with ID: ${webset.id}`);
   }
 
-  console.log("All webhooks, monitors, and websets have been deleted from Exa API.");
+  console.log("\n✅ All monitors and websets have been deleted from Exa API.");
 
   // Delete all webset items from database
   console.log("\n--- Deleting webset items from database ---");
@@ -46,7 +41,7 @@ async function deleteAll() {
   console.log(`Deleted ${deletedWebsets.count} websets from database`);
 
   await prisma.$disconnect();
-  console.log("\nAll data deleted from both Exa API and database.");
+  console.log("\n✅ All webset data deleted from both Exa API and database.");
 }
 
-deleteAll();
+deleteWebsets();

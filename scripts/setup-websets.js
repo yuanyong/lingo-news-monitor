@@ -1,5 +1,5 @@
 import * as dotenv from "dotenv";
-import Exa, { EventType } from "exa-js";
+import Exa from "exa-js";
 
 // Load environment variables
 dotenv.config({ path: '.env.local' });
@@ -110,40 +110,11 @@ const websets = [
   }
 ];
 
-
 async function main() {
   const exa = new Exa(process.env.EXA_API_KEY);
 
-  // Check if webhook already exists
-  const webhookUrl = process.env.WEBHOOK_URL;
-  if (!webhookUrl) {
-    throw new Error("WEBHOOK_URL is not set in the environment variables.");
-  }
-  const existingWebhooks = await exa.websets.webhooks.list();
-  let webhook = existingWebhooks.data.find(w => w.url === webhookUrl);
-
-  if (webhook) {
-    // Delete existing webhook
-    await exa.websets.webhooks.delete(webhook.id);
-    console.log(`Deleted existing webhook with ID: ${webhook.id}`);
-  }
-
-  // Create a new webhook
-  webhook = await exa.websets.webhooks.create({
-    url: webhookUrl,
-    events: [
-      EventType.webset_created,
-      EventType.webset_item_enriched,
-    ],
-  });
-
-  console.log(`Webhook created with ID: ${webhook.id}`);
-  console.log(`Webhook URL: ${webhookUrl}`);
-  console.log(`\nIMPORTANT: Save this webhook secret to your WEBHOOK_SECRET environment variable:`);
-  console.log(`WEBHOOK_SECRET=${webhook.secret}`);
-
   // Fetch existing websets and monitors
-  console.log('\n--- Checking existing websets and monitors ---');
+  console.log('--- Checking existing websets and monitors ---');
   const existingWebsets = await exa.websets.list();
   const monitors = await exa.websets.monitors.list();
 
@@ -199,6 +170,8 @@ async function main() {
     })
     console.log(`✓ Created monitor for webset "${webset.metadata?.name}" with ID: ${monitor.id}`);
   }
+
+  console.log('\n✅ Websets setup complete!');
 }
 
 main();
