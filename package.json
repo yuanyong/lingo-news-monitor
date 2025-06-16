@@ -8,12 +8,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "setup": "node scripts/setup.js",
+    "setup:websets": "node scripts/setup-websets.js",
+    "setup:webhook": "node scripts/setup-webhook.js",
+    "delete:websets": "node scripts/delete-websets.js",
+    "delete:webhook": "node scripts/delete-webhook.js",
     "smee": "smee -u https://smee.io/2lOamDARsY7xiixK -t http://localhost:3000/api/webhook",
     "db:push": "dotenv -e .env.local -- prisma db push",
     "db:migrate": "dotenv -e .env.local -- prisma migrate dev",
     "db:studio": "dotenv -e .env.local -- prisma studio",
-    "delete-all": "node ./scripts/delete_all.js",
     "postinstall": "prisma generate"
   },
   "dependencies": {

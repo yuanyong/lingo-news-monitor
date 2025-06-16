@@ -41,11 +41,11 @@ export default function InfoCard({ webset }: InfoCardProps) {
         
         <div className="mt-3 text-sm text-gray-700 space-y-3">
           <p>
-            This demo uses <a href="https://websets.exa.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets</a> to <strong>monitor the web semantically</strong> with natural language. Websets is a powerful tool for finding articles, people, companies, and more that match specific criteria you provide.
+            This demo uses <a href="https://websets.exa.ai/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets</a> to <strong>monitor the web semantically</strong> with natural language. Websets is a powerful tool for finding articles, people, companies, and more that match specific criteria.
           </p>
           
           <p>
-            It's powered by the <a href="https://docs.exa.ai/websets/api/overview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets API</a>, each topic is a webset with a monitor that updates daily. It uses techniques like semantic whitelists and deduplication using embedding similarity to implement the feed.
+            It's powered by the <a href="https://docs.exa.ai/websets/api/overview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets API</a>, each topic is a webset with a monitor for daily updates. The feed uses uses techniques like semantic whitelist and deduplication via embedding similarity.
           </p>
           
         </div>
