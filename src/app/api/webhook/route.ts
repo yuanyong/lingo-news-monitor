@@ -85,7 +85,7 @@ export async function POST(request: NextRequest) {
           title: title || null,
           description: itemData.properties.description || null,
           content: itemData.properties.content || null,
-          author: itemData.properties.article?.author || crawlData.author || null,
+          author: itemData.properties.article?.author || crawlData?.author || null,
           publishedAt: itemData.properties.article?.publishedAt ? new Date(itemData.properties.article.publishedAt) : null,
           imageUrl: crawlData?.image || null,
           faviconUrl: crawlData?.favicon || null,
