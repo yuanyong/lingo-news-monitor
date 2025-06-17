@@ -3,6 +3,7 @@
 import { Webset } from '@prisma/client';
 import { useState } from 'react';
 import { X, BookOpen, Github } from 'lucide-react';
+import { getAssetPath } from '@/app/utils';
 
 interface InfoCardProps {
   webset: Webset;
@@ -53,7 +54,7 @@ export default function InfoCard({ webset }: InfoCardProps) {
             href="#" 
             className="text-blue-600 hover:text-blue-700 font-bold transition-colors flex items-center gap-1"
           >
-            <img src="/exa_icon.ico" alt="Exa" className="w-3.5 h-3.5" />
+            <img src={getAssetPath("/exa_icon.ico")} alt="Exa" className="w-3.5 h-3.5" />
             Try Websets
           </a>
           <span className="hidden sm:inline text-gray-300">•</span>

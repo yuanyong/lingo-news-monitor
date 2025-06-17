@@ -18,7 +18,7 @@ const websets = [
         description: "Article covers significant international events, diplomatic relations, or global developments",
       },
       {
-        description: "Published by major news outlets (BBC, Reuters, AP, CNN International, The Guardian)",
+        description: "Published by a major news outlet",
       },
       {
         description: "Article was published in the last week",
@@ -48,25 +48,10 @@ const websets = [
         description: "Article covers stock markets, economic indicators, central bank decisions, or major financial events",
       },
       {
-        description: "Published by financial news outlets (Bloomberg, Financial Times, WSJ, Reuters Finance)",
+        description: "Article is a ",
       },
       {
-        description: "Article was published in the last week",
-      }
-    ]
-  },
-  {
-    name: "Sports",
-    query: "Sports news about athletes and teams in major leagues from the last week",
-    criteria: [
-      {
-        description: "Content covers major league sports, athlete news, team updates, or significant sporting events",
-      },
-      {
-        description: "Published by major sports outlets (ESPN, The Athletic, Sports Illustrated) or sports sections of major news sites",
-      },
-      {
-        description: "The news is about an actual storyline and not just a game recap or stats",
+        description: "Published by a top 25 financial news outlet",
       },
       {
         description: "Article was published in the last week",
@@ -75,13 +60,13 @@ const websets = [
   },
   {
     name: "AI",
-    query: "Artificial intelligence developments, AI research, and machine learning news from the last week",
+    query: "News from about the major AI companies or major AI breakthroughs from the last week",
     criteria: [
       {
-        description: "Content covers AI breakthroughs, new AI tools/models, AI company news, or AI policy developments",
+        description: "Content covers AI breakthroughs, new AI tools/models, AI company news, or AI research",
       },
       {
-        description: "Published by tech outlets or AI-focused publications",
+        description: "Published by popular tech or business news outlet",
       },
       {
         description: "Article was published in the last week",
@@ -96,22 +81,7 @@ const websets = [
         description: "Article reports on peer-reviewed research, clinical trial results, or scientific discoveries",
       },
       {
-        description: "Published by scientific journals, university press releases, or science news outlets (Nature, Science, New Scientist)",
-      },
-      {
-        description: "Article was published in the last week",
-      }
-    ]
-  },
-  {
-    name: "Startups",
-    query: "Startup news, new ventures, and entrepreneurship stories from the last week",
-    criteria: [
-      {
-        description: "Content covers startup launches, founder stories, startup trends, or entrepreneurship developments",
-      },
-      {
-        description: "Published by startup-focused outlets (TechCrunch, VentureBeat, The Information) or business publications",
+        description: "Published by a popular scientific news outlet",
       },
       {
         description: "Article was published in the last week",
@@ -134,29 +104,14 @@ const websets = [
     ]
   },
   {
-    name: "Product Launches",
-    query: "Major product launches or announcements from widely recognized companies in hardware or software from the last week",
-    criteria: [
-      {
-        description: "Content is about a new product release or major product update from a company that is widely recognized (hardware or software)",
-      },
-      {
-        description: "Article published by a top mainstream tech news publication or official company blog of a widely recognized brand (e.g., Apple Newsroom, Google Blog, The Verge, Engadget, TechCrunch, CNET, Wired)",
-      },
-      {
-        description: "Article was published in the last week",
-      }
-    ]
-  },
-  {
     name: "Uplifting",
-    query: "Uplifting news stories from the last week",
+    query: "News articles from the last week that are uplifting and positive",
     criteria: [
       {
-        description: "Article focuses on real-world positive impact, achievements, community successes, or heartwarming events",
+        description: "Article content would make sense in r/UpliftingNews",
       },
       {
-        description: "Article comes from a popular site and is not a listicle, clickbait, or SEO spam."
+        description: "Article is from a popular publication and not a listicle or SEO spam"
       },
       {
         description: "Article was published in the last week",
@@ -168,26 +123,6 @@ const websets = [
 async function main() {
   const exa = new Exa(process.env.EXA_API_KEY);
 
-  // Fetch existing websets and monitors
-  console.log('--- Checking existing websets and monitors ---');
-  const existingWebsets = await exa.websets.list();
-  const monitors = await exa.websets.monitors.list();
-
-  // Delete websets (and their monitors) that match names in websets
-  const configNames = websets.map(ws => ws.name);
-  for (const webset of existingWebsets.data) {
-    if (configNames.includes(webset.metadata?.name)) {
-      // Delete monitors for this webset
-      for (const monitor of monitors.data.filter(m => m.websetId === webset.id)) {
-        await exa.websets.monitors.delete(monitor.id);
-        console.log(`Deleted monitor with ID: ${monitor.id} for webset "${webset.metadata?.name}"`);
-      }
-      // Delete the webset
-      await exa.websets.delete(webset.id);
-      console.log(`Deleted webset "${webset.metadata?.name}" with ID: ${webset.id}`);
-    }
-  }
-
   // Create websets
   console.log('\n--- Creating websets ---');
   const createdWebsets = [];
@@ -198,7 +133,7 @@ async function main() {
         criteria,
         entity: { type: "article" },
         behavior: "append",
-        count: 100
+        count: 50,
       },
       enrichments: [
         {

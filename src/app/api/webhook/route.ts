@@ -95,6 +95,20 @@ export async function POST(request: NextRequest) {
           });
         }
 
+        // Check if URL already exists
+        const existingUrl = await prisma.websetItem.findUnique({
+          where: { url: itemData.properties.url }
+        });
+        
+        if (existingUrl) {
+          console.log(`Skipping item - URL already exists: ${itemData.properties.url}`);
+          return NextResponse.json({
+            received: true,
+            type: body.type,
+            timestamp: new Date().toISOString(),
+          });
+        }
+
         const itemFields = {
           url: itemData.properties.url,
           title: title || null,
