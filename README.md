@@ -60,7 +60,7 @@ npm run setup:webhook
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see your news monitor!
+Visit [http://localhost:3000/websets-news-monitor](http://localhost:3000/websets-news-monitor) to see your news monitor!
 
 ## 🔧 Webset Configuration
 

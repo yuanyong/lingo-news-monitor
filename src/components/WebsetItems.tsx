@@ -5,6 +5,7 @@ import { formatDistanceToNowStrict } from 'date-fns';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { getAssetPath } from '@/app/utils';
 
 function formatAuthor(author: string): string {
   // Handle "By Author Name - Title, Publication" format
@@ -65,7 +66,7 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
     async function fetchItems() {
       try {
         setLoading(true);
-        const response = await fetch(`/api/websets/${websetId}/items?page=${page}`);
+        const response = await fetch(getAssetPath(`/api/websets/${websetId}/items?page=${page}`));
         if (!response.ok) {
           throw new Error('Failed to fetch items');
         }

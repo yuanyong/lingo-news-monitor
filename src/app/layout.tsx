@@ -25,6 +25,7 @@ const reckless = localFont({
 export const metadata: Metadata = {
   title: "Websets News Monitor",
   description: "Monitor the web semantically with Websets",
+  metadataBase: new URL("https://demo.exa.ai/websets-news-monitor"),
 };
 
 export default function RootLayout({
