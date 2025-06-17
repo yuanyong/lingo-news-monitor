@@ -12,23 +12,41 @@ if (!process.env.EXA_API_KEY) {
 async function deleteWebsets() {
   const exa = new Exa(process.env.EXA_API_KEY);
 
-  // Delete all monitors
-  console.log('--- Deleting monitors ---');
+  // Get websets from our database
+  const dbWebsets = await prisma.webset.findMany();
+
+  if (dbWebsets.length === 0) {
+    console.log("No websets found in database. Nothing to delete.");
+    return;
+  }
+
+  console.log(`Found ${dbWebsets.length} websets in database to delete.`);
+
+  // Delete monitors first (websets with monitors can't be deleted)
+  console.log('\n--- Checking and deleting monitors ---');
   const monitors = await exa.websets.monitors.list();
+  let deletedMonitorCount = 0;
   for (const monitor of monitors.data) {
-    await exa.websets.monitors.delete(monitor.id);
-    console.log(`Deleted monitor with ID: ${monitor.id}`);
+    if (dbWebsets.some(w => w.websetId === monitor.websetId)) {
+      await exa.websets.monitors.delete(monitor.id);
+      console.log(`Deleted monitor with ID: ${monitor.id}`);
+      deletedMonitorCount++;
+    }
+  }
+  console.log(`Deleted ${deletedMonitorCount} monitors.`);
+
+  // Delete websets from Exa API using the IDs from our database
+  console.log('\n--- Deleting websets from Exa API ---');
+  for (const dbWebset of dbWebsets) {
+    try {
+      await exa.websets.delete(dbWebset.websetId);
+      console.log(`Deleted webset "${dbWebset.name}" with ID: ${dbWebset.websetId}`);
+    } catch (error) {
+      console.error(`Failed to delete webset ${dbWebset.websetId}:`, error.message);
+    }
   }
 
-  // Delete all websets
-  console.log('\n--- Deleting websets ---');
-  const websets = await exa.websets.list();
-  for (const webset of websets.data) {
-    await exa.websets.delete(webset.id);
-    console.log(`Deleted webset "${webset.metadata?.name || 'unnamed'}" with ID: ${webset.id}`);
-  }
-
-  console.log("\n✅ All monitors and websets have been deleted from Exa API.");
+  console.log("\n✅ Websets deleted from Exa API.");
 
   // Delete all webset items from database
   console.log("\n--- Deleting webset items from database ---");

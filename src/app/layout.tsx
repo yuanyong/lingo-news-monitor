@@ -53,7 +53,7 @@ export default function RootLayout({
                   rel="origin"
                   className="text-gray-600 hover:underline cursor-pointer text-center"
                 >
-                  GitHub
+                  Source Code
                 </Link>
                 <span className="text-gray-400">|</span>
                 <Link
@@ -74,15 +74,6 @@ export default function RootLayout({
                   Exa API
                 </Link>
               </div>
-              <a 
-                href="https://exa.ai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-2 text-sm text-gray-500 mt-2 hover:text-gray-700 transition-colors"
-              >
-                <span>Powered by</span>
-                <img src="/exa_logo.png" alt="Exa" className="h-4" />
-              </a>
             </div>
           </footer>
 

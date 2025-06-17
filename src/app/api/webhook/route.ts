@@ -28,6 +28,17 @@ export async function POST(request: NextRequest) {
     case 'webset.created': {
       try {
         const websetData = body.data;
+        
+        // Only process websets created by our app
+        if (websetData.metadata?.app !== 'websets-news-monitor') {
+          console.log(`Ignoring webset ${websetData.id} - not created by websets-news-monitor app`);
+          return NextResponse.json({ 
+            received: true, 
+            ignored: true,
+            reason: 'Not a websets-news-monitor webset' 
+          });
+        }
+        
         const websetName = websetData.metadata?.name;
         if (!websetName) {
           console.error(`webset.created event missing metadata.name for websetId ${websetData.id}`);
@@ -50,11 +61,15 @@ export async function POST(request: NextRequest) {
     case 'webset.item.enriched':
       try {
         const itemData = body.data;
-        // Ensure the webset exists in our DB
+        // Check if this webset exists in our DB (skip if it's not ours)
         const dbWebset = await prisma.webset.findUnique({ where: { websetId: itemData.websetId } });
         if (!dbWebset) {
-          console.error(`webset.item.enriched: Webset ${itemData.websetId} does not exist in DB`);
-          return NextResponse.json({ error: 'Webset does not exist in DB' }, { status: 400 });
+          // This is expected for websets not created by our app
+          return NextResponse.json({ 
+            received: true, 
+            ignored: true,
+            reason: 'Webset not managed by this app' 
+          });
         }
 
         // TODO: Maybe different api for more reliable image and author

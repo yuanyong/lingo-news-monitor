@@ -66,6 +66,9 @@ const websets = [
         description: "Published by major sports outlets (ESPN, The Athletic, Sports Illustrated) or sports sections of major news sites",
       },
       {
+        description: "The news is about an actual storyline and not just a game recap or stats",
+      },
+      {
         description: "Article was published in the last week",
       }
     ]
@@ -195,7 +198,7 @@ async function main() {
         criteria,
         entity: { type: "article" },
         behavior: "append",
-        count: 25
+        count: 100
       },
       enrichments: [
         {
@@ -203,7 +206,10 @@ async function main() {
           format: "text",
         }
       ],
-      metadata: { name }
+      metadata: { 
+        name,
+        app: "websets-news-monitor"
+      }
     });
     createdWebsets.push(webset);
     console.log(`✓ Created webset "${name}" with ID: ${webset.id}`);
