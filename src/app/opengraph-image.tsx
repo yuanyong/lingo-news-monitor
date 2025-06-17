@@ -2,7 +2,7 @@ import { ImageResponse } from 'next/og'
 
 export const runtime = 'edge'
 
-export const alt = 'Semantic Web Monitor'
+export const alt = 'Websets News Monitor'
 export const size = {
   width: 1200,
   height: 630,
@@ -44,7 +44,7 @@ export default async function Image() {
             fontFamily: 'Reckless',
           }}
         >
-          Semantic{'\u00A0'}<span style={{ color: '#254bf1' }}>Web Monitor</span>
+          Websets{'\u00A0'}<span style={{ color: '#254bf1' }}>News Monitor</span>
         </h1>
         
         {/* Powered by Exa - using ABCDiatype for body text */}

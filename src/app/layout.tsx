@@ -23,7 +23,7 @@ const reckless = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Semantic Web Monitor",
+  title: "Websets News Monitor",
   description: "Monitor the web semantically with Websets",
 };
 

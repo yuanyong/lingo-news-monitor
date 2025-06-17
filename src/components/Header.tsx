@@ -51,8 +51,8 @@ export default function Header() {
       <div className="max-w-4xl mx-auto py-4">
         <div className="flex items-center justify-between">
           <h2 className="text-3xl font-medium">
-            <span className="inline-block">Semantic</span>{' '}
-            <span className='text-brand-default inline-block'>Web Monitor</span>
+            <span className="inline-block">Websets</span>{' '}
+            <span className='text-brand-default inline-block'>News Monitor</span>
           </h2>
           <NextUpdateCountdown />
         </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import { Webset } from '@prisma/client';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, BookOpen, Github } from 'lucide-react';
 
 interface InfoCardProps {
@@ -9,14 +9,12 @@ interface InfoCardProps {
 }
 
 export default function InfoCard({ webset }: InfoCardProps) {
-  const [isDismissed, setIsDismissed] = useState(false);
-
-  useEffect(() => {
-    const dismissed = localStorage.getItem('infoCardDismissed');
-    if (dismissed === 'true') {
-      setIsDismissed(true);
+  const [isDismissed, setIsDismissed] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('infoCardDismissed') === 'true';
     }
-  }, []);
+    return true; // Default to hidden during SSR
+  });
 
   const handleDismiss = () => {
     setIsDismissed(true);
@@ -45,7 +43,7 @@ export default function InfoCard({ webset }: InfoCardProps) {
           </p>
           
           <p>
-            It's powered by the <a href="https://docs.exa.ai/websets/api/overview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets API</a>, each topic is a webset with a monitor for daily updates. The feed uses uses techniques like semantic whitelist and deduplication via embedding similarity.
+            It's powered by the <a href="https://docs.exa.ai/websets/api/overview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets API</a>, each topic is a Webset with a monitor for daily updates. It implements techniques like semantic whitelisting and storyline deduplication with embedings to curate the feed.
           </p>
           
         </div>
@@ -60,7 +58,7 @@ export default function InfoCard({ webset }: InfoCardProps) {
           </a>
           <span className="hidden sm:inline text-gray-300">•</span>
           <a 
-            href="#" 
+            href="https://docs.exa.ai/examples/demo-websets-news-monitor" 
             className="text-gray-600 hover:text-gray-800 font-bold transition-colors flex items-center gap-1"
           >
             <BookOpen size={14} />
@@ -68,7 +66,7 @@ export default function InfoCard({ webset }: InfoCardProps) {
           </a>
           <span className="hidden sm:inline text-gray-300">•</span>
           <a 
-            href="#" 
+            href="https://github.com/exa-labs/websets-news-monitor/tree/main" 
             className="text-gray-600 hover:text-gray-800 font-bold transition-colors flex items-center gap-1"
           >
             <Github size={14} />

@@ -9,15 +9,16 @@ if (!process.env.EXA_API_KEY) {
 
 // Define websets to create
 const websets = [
+  // Popular mainstream categories first
   {
-    name: "Startup Funding",
-    query: "Startups that raised a funding round in the last week",
+    name: "World News",
+    query: "Major international news, global events, and world affairs from the last week",
     criteria: [
       {
-        description: "Article is about a startup raising a funding round of at leas $1M",
+        description: "Article covers significant international events, diplomatic relations, or global developments",
       },
       {
-        description: "Article published in a top 20 tech publication (TechCrunch, The Verge, Wired, etc.)",
+        description: "Published by major news outlets (BBC, Reuters, AP, CNN International, The Guardian)",
       },
       {
         description: "Article was published in the last week",
@@ -25,17 +26,14 @@ const websets = [
     ]
   },
   {
-    name: "Futurism",
-    query: "Articles about the future of technology, cutting edge research, and long term tech predictions from the last week",
+    name: "Politics",
+    query: "Political news, government decisions, and policy changes from the last week",
     criteria: [
       {
-        description: "Content discusses trends, predictions, or innovations expected to have significant impact in the future (5+ years)",
+        description: "Content covers political developments, elections, legislation, or government policy",
       },
       {
-        description: "Content is about far out tech and novel research, not day to day tech news or product updates",
-      },
-      {
-        description: "Article published in a leading technology, science, or futurism publication (e.g., Wired, MIT Technology Review, Futurism, Singularity Hub, New Scientist)"
+        description: "Published by reputable political news sources or major media outlets",
       },
       {
         description: "Article was published in the last week",
@@ -43,17 +41,14 @@ const websets = [
     ]
   },
   {
-    name: "Memes",
-    query: "Articles about viral internet trends on social medial platforms from the last week",
+    name: "Finance",
+    query: "Financial markets, economic news, and investment updates from the last week",
     criteria: [
       {
-        description: "Content discusses viral trends, memes, or cultural phenomena that originated on social media platforms",
+        description: "Article covers stock markets, economic indicators, central bank decisions, or major financial events",
       },
       {
-        description: "Content published by a high-traffic digital culture or social media analysis site (e.g., Know Your Meme, Mashable, BuzzFeed, The Verge, Reddit trend reports)"
-      },
-      {
-        description: "The article is about a specific meme, trend, or cultural phenomenon and not a list or generic overview",
+        description: "Published by financial news outlets (Bloomberg, Financial Times, WSJ, Reuters Finance)",
       },
       {
         description: "Article was published in the last week",
@@ -61,47 +56,104 @@ const websets = [
     ]
   },
   {
-    name: "Hot Takes",
-    query: "Opinionated articles, controversial opinions, hot takes, bold predictions, or contrarian viewpoints from the last week",
+    name: "Sports",
+    query: "Sports news about athletes and teams in major leagues from the last week",
     criteria: [
       {
-        description: "Content expresses a strong or controversial opinion, prediction, or viewpoint (hot take) on any topic (sports, tech, politics, etc.)"
+        description: "Content covers major league sports, athlete news, team updates, or significant sporting events",
       },
       {
-        description: "Article published in an opinion or commentary section of a reputable media outlet or a well-known tech or news columnist (e.g., New York Times Opinion, The Atlantic, Stratechery, The Verge, TechCrunch, The Guardian)"
+        description: "Published by major sports outlets (ESPN, The Athletic, Sports Illustrated) or sports sections of major news sites",
       },
       {
-        description: "Article was published in the last week"
+        description: "Article was published in the last week",
+      }
+    ]
+  },
+  {
+    name: "AI",
+    query: "Artificial intelligence developments, AI research, and machine learning news from the last week",
+    criteria: [
+      {
+        description: "Content covers AI breakthroughs, new AI tools/models, AI company news, or AI policy developments",
+      },
+      {
+        description: "Published by tech outlets or AI-focused publications",
+      },
+      {
+        description: "Article was published in the last week",
+      }
+    ]
+  },
+  {
+    name: "Science",
+    query: "Scientific research publications, clinical trials, and research breakthroughs from the last week",
+    criteria: [
+      {
+        description: "Article reports on peer-reviewed research, clinical trial results, or scientific discoveries",
+      },
+      {
+        description: "Published by scientific journals, university press releases, or science news outlets (Nature, Science, New Scientist)",
+      },
+      {
+        description: "Article was published in the last week",
+      }
+    ]
+  },
+  {
+    name: "Startups",
+    query: "Startup news, new ventures, and entrepreneurship stories from the last week",
+    criteria: [
+      {
+        description: "Content covers startup launches, founder stories, startup trends, or entrepreneurship developments",
+      },
+      {
+        description: "Published by startup-focused outlets (TechCrunch, VentureBeat, The Information) or business publications",
+      },
+      {
+        description: "Article was published in the last week",
+      }
+    ]
+  },
+  {
+    name: "VC Rounds",
+    query: "Article about startups raising funding rounds in the last week",
+    criteria: [
+      {
+        description: "Article announces a funding round of at least $1M",
+      },
+      {
+        description: "Published in a popular tech/business publication or an official company announcement",
+      },
+      {
+        description: "Published in the last week",
       }
     ]
   },
   {
     name: "Product Launches",
-    query: "Major product launches or announcements from widely recognized companies in hardware or software fron the last week",
+    query: "Major product launches or announcements from widely recognized companies in hardware or software from the last week",
     criteria: [
       {
-        description: "Content is about a new product release or major product update from a company that is widely recognized (hardware or software)"
+        description: "Content is about a new product release or major product update from a company that is widely recognized (hardware or software)",
       },
       {
-        description: "Article published by a top mainstream tech news publication or official company blog of a widely recognized brand (e.g., Apple Newsroom, Google Blog, The Verge, Engadget, TechCrunch, CNET, Wired)"
+        description: "Article published by a top mainstream tech news publication or official company blog of a widely recognized brand (e.g., Apple Newsroom, Google Blog, The Verge, Engadget, TechCrunch, CNET, Wired)",
       },
       {
-        description: "Article was published in the last week"
+        description: "Article was published in the last week",
       }
     ]
   },
   {
-    name: "Positive",
-    query: "Positive and uplifting news stories from the last week",
+    name: "Uplifting",
+    query: "Uplifting news stories from the last week",
     criteria: [
       {
-        description: "Content highlights genuinely uplifting, inspiring, or feel-good news, not clickbait or spammy lists",
-      },
-      {
-        description: "Stories published by reputable outlets known for quality journalism (e.g., BBC, NPR, The Guardian, AP)",
-      },
-      {
         description: "Article focuses on real-world positive impact, achievements, community successes, or heartwarming events",
+      },
+      {
+        description: "Article comes from a popular site and is not a listicle, clickbait, or SEO spam."
       },
       {
         description: "Article was published in the last week",

@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
       }
       break;
     }
-    case 'webset.item.enriched': {
+    case 'webset.item.enriched':
       try {
         const itemData = body.data;
         // Ensure the webset exists in our DB
@@ -119,7 +119,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'DB error' }, { status: 500 });
       }
       break;
-    }
     default:
       break;
   }
