@@ -1,7 +1,7 @@
 # 📰 Websets News Monitor
 ### Powered by [Exa.ai](https://exa.ai) - The Search Engine for AI Applications
 
-![Screenshot](https://websets-news-monitor.vercel.app/opengraph-image.jpg)
+![Screenshot](https://demo.exa.ai/websets-news-monitor/opengraph-image)
 
 ## 🎯 What is Websets News Monitor
 
@@ -29,7 +29,7 @@ For more details on how the key functionality works, see the [documentation](htt
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/websets-news-monitor.git
+git clone https://github.com/exa-labs/websets-news-monitor.git
 cd websets-news-monitor
 ```
 
