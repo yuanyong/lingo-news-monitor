@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getAssetPath } from '@/app/utils';
+import { ImageIcon } from 'lucide-react';
 
 function formatAuthor(author: string): string {
   // Handle "By Author Name - Title, Publication" format
@@ -61,6 +62,7 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
   const [data, setData] = useState<WebsetItemsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     async function fetchItems() {
@@ -112,6 +114,10 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
 
   const { items, hasMore } = data;
 
+  const handleImageError = (itemId: string) => {
+    setFailedImages(prev => new Set(prev).add(itemId));
+  };
+
   return (
     <div className="max-w-4xl mx-auto">
       <div className="border-t border-gray-200 divide-y divide-gray-200">
@@ -124,7 +130,7 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
             className="flex gap-4 py-3 hover:bg-gray-50 transition-colors cursor-pointer group"
           >
             {/* Slightly wide aspect ratio image on the left */}
-            {item.imageUrl ? (
+            {item.imageUrl && !failedImages.has(item.id) ? (
               <div 
                 className="relative w-28 h-22 flex-shrink-0 bg-gray-100"
                 style={{ borderRadius: '0.5rem', overflow: 'hidden' }}
@@ -136,13 +142,12 @@ export default function WebsetItems({ websetId, page = 1 }: { websetId: string, 
                   className="object-cover"
                   sizes="(max-width: 640px) 112px, 224px"
                   priority={index < 5}
+                  onError={() => handleImageError(item.id)}
                 />
               </div>
             ) : (
               <div className="w-28 h-22 flex-shrink-0 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400">
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+                <ImageIcon className="w-8 h-8" />
               </div>
             )}
 

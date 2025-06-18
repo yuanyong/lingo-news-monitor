@@ -32,23 +32,11 @@ export async function GET(
     const hasMore = items.length > limit;
     const itemsToReturn = hasMore ? items.slice(0, limit) : items;
 
-    // Check that we really excluded items without images or favicons
-    for (const item of itemsToReturn) {
-      if (!item.imageUrl || !item.faviconUrl || !item.publishedAt) {
-        console.error(`Item ${item.itemId} is missing required fields:`, {
-          imageUrl: item.imageUrl,
-          faviconUrl: item.faviconUrl,
-          publishedAt: item.publishedAt,
-        });
-        return NextResponse.json({ error: 'Some items are missing required fields' }, { status: 500 });
-      }
-    }
-
-    return NextResponse.json({ 
-      items: itemsToReturn, 
+    return NextResponse.json({
+      items: itemsToReturn,
       hasMore,
       page,
-      limit 
+      limit
     });
   } catch (error) {
     console.error('Failed to fetch webset items:', error);

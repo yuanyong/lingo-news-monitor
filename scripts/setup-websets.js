@@ -75,13 +75,13 @@ const websets = [
   },
   {
     name: "Science",
-    query: "Scientific research publications, clinical trials, and research breakthroughs from the last week",
+    query: "Recent scientific news, research updates, clinical trial announcements, or discoveries",
     criteria: [
       {
-        description: "Article reports on peer-reviewed research, clinical trial results, or scientific discoveries",
+        description: "Article discusses new scientific research, trends, discoveries, or major updates in any scientific field",
       },
       {
-        description: "Published by a popular scientific news outlet",
+        description: "Published by a reputable news outlet, science journal, university, or science website",
       },
       {
         description: "Article was published in the last week",
@@ -89,7 +89,7 @@ const websets = [
     ]
   },
   {
-    name: "VC Rounds",
+    name: "Startup Funding",
     query: "Article about startups raising funding rounds in the last week",
     criteria: [
       {
