@@ -44,7 +44,7 @@ export default function InfoCard({ webset }: InfoCardProps) {
           </p>
           
           <p>
-            It's powered by the <a href="https://docs.exa.ai/websets/api/overview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets API</a>, each topic is a Webset with a monitor for daily updates. It implements techniques like semantic whitelisting and storyline deduplication with embedings to curate the feed.
+            It's powered by the <a href="https://docs.exa.ai/websets/api/overview" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Websets API</a>, each topic is a Webset with a monitor for daily updates. It implements techniques like semantic whitelisting and storyline deduplication with embeddings to curate the feed.
           </p>
           
         </div>
