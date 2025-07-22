@@ -120,6 +120,28 @@ const websets = [
   }
 ];
 
+async function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function createWithRetry(createFn, itemName, maxRetries = 10, baseDelay = 30000) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      return await createFn();
+    } catch (error) {
+      if (error.statusCode === 403 && error.message?.includes('maximum number of concurrent requests')) {
+        const delay = baseDelay + (attempt - 1) * 30000; // 30s, 60s, 90s, etc up to 10 mins
+        console.log(`⚠️  Rate limited creating ${itemName}, retrying in ${delay/1000}s (attempt ${attempt}/${maxRetries})`);
+        if (attempt < maxRetries) {
+          await sleep(delay);
+          continue;
+        }
+      }
+      throw error;
+    }
+  }
+}
+
 async function main() {
   const exa = new Exa(process.env.EXA_API_KEY);
 
@@ -127,25 +149,28 @@ async function main() {
   console.log('\n--- Creating websets ---');
   const createdWebsets = [];
   for (const { name, query, criteria } of websets) {
-    const webset = await exa.websets.create({
-      search: {
-        query,
-        criteria,
-        entity: { type: "article" },
-        behavior: "append",
-        count: 50,
-      },
-      enrichments: [
-        {
-          description: "One sentence summary of the article using content not in the title",
-          format: "text",
+    const webset = await createWithRetry(async () => {
+      return await exa.websets.create({
+        search: {
+          query,
+          criteria,
+          entity: { type: "article" },
+          behavior: "append",
+          count: 50,
+        },
+        enrichments: [
+          {
+            description: "One sentence summary of the article using content not in the title",
+            format: "text",
+          }
+        ],
+        metadata: { 
+          name,
+          app: "websets-news-monitor"
         }
-      ],
-      metadata: { 
-        name,
-        app: "websets-news-monitor"
-      }
-    });
+      });
+    }, `webset "${name}"`);
+    
     createdWebsets.push(webset);
     console.log(`✓ Created webset "${name}" with ID: ${webset.id}`);
   }
