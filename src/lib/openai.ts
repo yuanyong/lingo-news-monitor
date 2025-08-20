@@ -1,17 +1,17 @@
-import OpenAI from 'openai';
+import { embed } from 'ai';
+import { createOpenAI } from '@ai-sdk/openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+// Create custom OpenAI provider with different base URL
+const customOpenAI = createOpenAI({
+  baseURL: process.env.OPENAI_API_BASE_URL, // Your custom base URL
+  apiKey: process.env.OPENAI_API_BASE_KEY
 });
 
 export async function embedText(text: string): Promise<number[]> {
-  const response = await openai.embeddings.create({
-    model: 'text-embedding-3-small',
-    input: text,
-    dimensions: 1536,
+  // 'embedding' is a single embedding object (number[])
+  const { embedding } = await embed({
+    model: customOpenAI.textEmbeddingModel('embedding-2'),
+    value: text,
   });
-
-  return response.data[0].embedding;
+  return embedding;
 }
-
-export { openai };

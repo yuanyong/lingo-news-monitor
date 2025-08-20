@@ -19,9 +19,11 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^2.0.16",
     "@prisma/client": "^6.9.0",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vercel/analytics": "^1.5.0",
+    "ai": "^5.0.18",
     "date-fns": "^4.1.0",
     "date-fns-tz": "^3.2.0",
     "exa-js": "^1.8.8",
@@ -48,6 +50,7 @@
     "eslint-config-next": "15.3.3",
     "prisma": "^6.9.0",
     "tailwindcss": "^4",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   }
 }
