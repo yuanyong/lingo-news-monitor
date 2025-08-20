@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
   // @ts-ignore - `serverActions` is under experimental features and may not be typed yet
   experimental: {
     serverActions: {
-      allowedOrigins: ['demo.exa.ai'],
+      allowedOrigins: ['*'],
     },
   }
 };
