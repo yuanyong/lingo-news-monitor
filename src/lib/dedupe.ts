@@ -1,8 +1,10 @@
 import { prisma } from '@/lib/prisma';
 import { openai } from "./openai";
+import { generateObject } from 'ai';
 import { zodTextFormat } from "openai/helpers/zod";
 import { z } from "zod";
 import outdent from "outdent";
+import { fa } from 'zod/v4/locales';
 
 /**
  * Find similar items using vector similarity search
@@ -27,8 +29,11 @@ async function getSimilarItems(queryVector: number[], websetId: string, limit: n
   }>>(query, queryVector, websetId, limit);
 }
 
+// Define your schema (assuming this was your original schema)
 const DuplicateCheck = z.object({
-  is_duplicate: z.boolean(),
+  isDuplicate: z.boolean(),
+  reason: z.string().optional(),
+  confidence: z.number().min(0).max(1).optional(),
 });
 
 /**
@@ -37,41 +42,32 @@ const DuplicateCheck = z.object({
  * @param similarTitles - Array of similar titles to compare against
  * @returns True if the title is a duplicate
  */
-async function checkSemanticDuplicate(titleQuery: string, similarTitles: string[]): Promise<boolean> {
-  const response = await openai.responses.parse({
-    model: "gpt-4.1-mini",
-    input: [
-      {
-        role: "system",
-        content: outdent`
-          You are a news deduplication assistant. Determine if a given news story is a duplicate of any stories in a provided list.
-          Stories are considered duplicates if theay are about the same event or topic, even if they are worded differently.
-          The stories will end up in a news aggregator, and we don't want to show users highly related stories.
-        `
-      },
-      {
-        role: "user",
-        content: outdent`
-          Is this story a duplicate of any in the list below?
-          
-          Query story: "${titleQuery}"
-          
-          Similar stories:
-          ${similarTitles.join('\n')}
-        `
-      }
-    ],
-    text: {
-      format: zodTextFormat(DuplicateCheck, "duplicate_check"),
-    },
+export async function checkSemanticDuplicate(titleQuery: string, similarTitles: string[]): Promise<boolean> {
+  return false;
+  const { object: response } = await generateObject({
+    model: openai('glm-4.5'), // or 'gpt-4', 'gpt-3.5-turbo'
+    system: outdent`
+      You are a news deduplication assistant. Determine if a given news story is a duplicate of any stories in a provided list.
+      Stories are considered duplicates if they are about the same event or topic, even if they are worded differently.
+      The stories will end up in a news aggregator, and we don't want to show users highly related stories.
+    `,
+    prompt: outdent`
+      Is this story a duplicate of any in the list below?
+      
+      Query story: "${titleQuery}"
+      
+      Similar stories:
+      ${similarTitles.join('\n')}
+    `,
+    schema: DuplicateCheck,
   });
 
-  if (response.output_parsed == null) {
+  if (response == null) {
     console.error("Failed to parse LLM response:", response);
     throw new Error("LLM response parsing error");
   }
   
-  return response.output_parsed.is_duplicate;
+  return response.isDuplicate;
 }
 
 /**

@@ -1,4 +1,4 @@
-import { embedText } from './openai.ts';
+import { embedText } from './openai';
 
 async function testEmbedding() {
   try {

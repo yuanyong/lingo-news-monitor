@@ -1,5 +1,5 @@
 import { embed } from 'ai';
-import { createOpenAI } from '@ai-sdk/openai';
+import { createOpenAI, openai } from '@ai-sdk/openai';
 
 // Create custom OpenAI provider with different base URL
 const customOpenAI = createOpenAI({
@@ -15,3 +15,7 @@ export async function embedText(text: string): Promise<number[]> {
   });
   return embedding;
 }
+
+
+// Export the OpenAI instance
+export { openai };
