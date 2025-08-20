@@ -11,30 +11,34 @@ datasource db {
 
 model Webset {
   id        String       @id @default(cuid())
-  websetId  String       @unique
+  websetId  String       @unique @map("webset_id")
   name      String
   data      Json?
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
   items     WebsetItem[]
+
+  @@map("webset")
 }
 
 model WebsetItem {
   id          String    @id @default(cuid())
-  itemId      String    @unique
-  websetId    String
+  itemId      String    @unique @map("item_id")
+  websetId    String    @map("webset_id")
   url         String    @unique
   title       String?
   description String?
   content     String?
   author      String?
-  publishedAt DateTime?
+  publishedAt DateTime? @map("published_at")
   enrichments Json?
   evaluations Json?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  imageUrl    String?
-  faviconUrl  String?
-  webset      Webset    @relation(fields: [websetId], references: [websetId])
-  embedding Unsupported("vector(1536)")?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  imageUrl    String?   @map("image_url")
+  faviconUrl  String?   @map("favicon_url")
+  webset      Webset    @relation(fields: [websetId], references: [websetId], onDelete: Cascade)
+  embedding   Unsupported("vector(1536)")?
+
+  @@map("webset_item")
 }
